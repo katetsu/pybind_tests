@@ -1,40 +1,52 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/stl_bind.h>
 
-int add(int i, int j) {
-    return i + j;
-}
-
+#include <pybind11/pytypes.h>
+#include <vector>
+#include <iostream>
+#include <chrono> 
+PYBIND11_MAKE_OPAQUE(std::vector<float>);
 namespace py = pybind11;
 
-PYBIND11_MODULE(cmake_example, m) {
-    m.doc() = R"pbdoc(
-        Pybind11 example plugin
-        -----------------------
+std::vector<float> test_float(size_t s) {
+    return std::vector<float> (s, 10e9);
+}
 
-        .. currentmodule:: cmake_example
 
-        .. autosummary::
-           :toctree: _generate
+float test_cpp(py::list& s) {
+    auto start = std::chrono::high_resolution_clock::now();
 
-           add
-           subtract
-    )pbdoc";
+    for (auto& i : s){
+        continue;
+    }
+    auto finish = std::chrono::high_resolution_clock::now();
 
-    m.def("add", &add, R"pbdoc(
-        Add two numbers
+    std::chrono::duration<double> elapsed = finish - start;
 
-        Some other explanation about the add function.
-    )pbdoc");
+    return elapsed.count();
 
-    m.def("subtract", [](int i, int j) { return i - j; }, R"pbdoc(
-        Subtract two numbers
+}
 
-        Some other explanation about the subtract function.
-    )pbdoc");
+float test_vector(size_t s) {
 
-#ifdef VERSION_INFO
-    m.attr("__version__") = VERSION_INFO;
-#else
-    m.attr("__version__") = "dev";
-#endif
+    auto data = std::vector<float> (s, 10e9);
+    auto start = std::chrono::high_resolution_clock::now();
+
+    for (auto& i : data){
+        continue;
+    }
+    auto finish = std::chrono::high_resolution_clock::now();
+
+    std::chrono::duration<double> elapsed = finish - start;
+
+    return elapsed.count();
+
+}
+
+PYBIND11_MODULE(example, m) {
+    py::bind_vector<std::vector<float>>(m, "VectorFloat");
+    m.def("test_float", &test_float);
+
+    m.def("test_cpp", &test_cpp);
+    m.def("test_vector", &test_vector);
 }

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.12)
-project(cmake_example)
+project(example)
 
 add_subdirectory(pybind11)
-pybind11_add_module(cmake_example src/main.cpp)
+pybind11_add_module(example src/main.cpp)
