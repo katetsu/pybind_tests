@@ -5,7 +5,7 @@ import time
 r= example.test_float(int(sys.argv[1]))
 start = time.time()
 for i in r:
-	continue
+	j = i*3
 end = time.time()
 print(f"VectorFloat: {end - start}")
 
@@ -13,14 +13,14 @@ l = [float(a) for a in range(int(sys.argv[1]))]
 ll = tuple(l)
 start = time.time()
 for i in ll:
-       continue
+       j = i*3
 end = time.time()
 print(f"tuple: {end - start}")
 
 
 start = time.time()
 for i in l:
-       continue
+       j = i*3
 end = time.time()
 print(f"list: {end - start}")
 
